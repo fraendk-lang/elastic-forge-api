@@ -28,10 +28,11 @@ app.use(express.json({ limit: '50mb' }))
 
 app.set('trust proxy', 1)
 
+const dbDir = DB_PATH.includes('/') ? DB_PATH.replace(/\/[^/]+$/, '') : '.'
 app.use(session({
   store: new (SQLiteStore as any)({
     db: 'sessions.db',
-    dir: DB_PATH.replace(/\/[^/]+$/, '') || '.',
+    dir: dbDir,
   }),
   secret: SESSION_SECRET,
   resave: false,
