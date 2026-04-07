@@ -13,8 +13,15 @@ const SQLiteStore = connectSqlite3(session)
 const app = express()
 
 app.use(helmet({ crossOriginResourcePolicy: false }))
+const allowedOrigins = CORS_ORIGIN.split(',').map((o) => o.trim())
 app.use(cors({
-  origin: CORS_ORIGIN,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(null, false)
+    }
+  },
   credentials: true,
 }))
 app.use(express.json({ limit: '50mb' }))
